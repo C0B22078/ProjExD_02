@@ -5,7 +5,12 @@ import pygame as pg
 
 
 WIDTH, HEIGHT = 1600, 900
-
+delta = {
+pg.K_UP: (0,-5),
+pg.K_DOWN: (0,+5),
+pg.K_LEFT: (-5,0),
+pg.K_RIGHT: (+5,0),
+}
 
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
@@ -13,6 +18,9 @@ def main():
     bg_img = pg.image.load("ex02/fig/pg_bg.jpg")#backgroundimage
     kk_img = pg.image.load("ex02/fig/3.png")#koukaton_image
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
+    #こうかとんSurface (kk_img)から効果トンRect(kk_rct)を抽出する　
+    kk_rct =kk_img.get_rect()
+    kk_rct.center=900,400
     bomb_img = pg.Surface((20,20))
     bomb_img.set_colorkey((0,0,0)) #黒い部分を透明に
     pg.draw.circle(bomb_img,(255,0,0),(10,10),10)
@@ -22,21 +30,31 @@ def main():
     bomb_rect = bomb_img.get_rect()
     #bomb_rectの中心座標を乱数指定
     bomb_rect.center = x,y 
-
     clock = pg.time.Clock()
     tmr = 0
     vx,vy = +5,+5
+    
+    
+    
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
+        key_lst = pg.key.get_pressed()
+        sum_mv = [0,0] #合計移動量
+
+        for k,mv in delta.items():
+            if key_lst[k] :
+                sum_mv[0]+= mv[0]
+                sum_mv[1]+= mv[1]
+                
+            kk_rct.move_ip(sum_mv[0],sum_mv[1])
 
         screen.blit(bg_img, [0, 0])
-        screen.blit(kk_img, [900, 400])
+        screen.blit(kk_img, kk_rct)
         bomb_rect.move_ip(vx,vy) #練習2
         screen.blit(bomb_img,bomb_rect)
         pg.display.update()
-        
         tmr += 1
         clock.tick(50)
 
