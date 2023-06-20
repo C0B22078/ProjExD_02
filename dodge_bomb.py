@@ -58,9 +58,12 @@ def main():
     #こうかとんSurface (kk_img)からこうかとんRect(kk_rct)を抽出する　
     kk_rct =kk_imgs[(0,0)].get_rect()
     kk_rct.center=900,400
-    bomb_img = pg.Surface((20,20))
-    bomb_img.set_colorkey((0,0,0)) #黒い部分を透明に
-    pg.draw.circle(bomb_img,(255,0,0),(10,10),10)
+    bomb_imgs= []
+    for r in range(1, 11):
+        bomb_img = pg.Surface((20 * r, 20 * r))
+        pg.draw.circle(bomb_img, (255, 0, 0), (10 * r, 10 * r), 10 * r)
+        bomb_img.set_colorkey((0,0,0))
+        bomb_imgs.append(bomb_img)
     x = random.randint(0,WIDTH)
     y = random.randint(0,HEIGHT)
     #爆弾Surface(bomb_img)
@@ -70,6 +73,7 @@ def main():
     clock = pg.time.Clock()
     tmr = 0
     vx,vy = +5,+5
+    accs = [a for a in range(1, 11)]
 
     
     while True:
@@ -97,7 +101,10 @@ def main():
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_imgs[tuple(sum_mv)], kk_rct)
 
-        bomb_rect.move_ip(vx,vy) #練習2
+        avx, avy = vx*accs[min(tmr//500, 9)], vy*accs[min(tmr//500, 9)]
+
+        bomb_img = bomb_imgs[min(tmr//500,9)]
+        bomb_rect.move_ip(avx,avy) #練習2
         yoko,tate = window_judge(bomb_rect)
         if not yoko: #横方向に画面外だったら
             vx *= -1
