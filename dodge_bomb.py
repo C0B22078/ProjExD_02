@@ -8,8 +8,8 @@ WIDTH, HEIGHT = 1600, 900
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
-    bg_img = pg.image.load("ex02/fig/pg_bg.jpg")
-    kk_img = pg.image.load("ex02/fig/3.png")
+    bg_img = pg.image.load("ex02/fig/pg_bg.jpg")#backgroundimage
+    kk_img = pg.image.load("ex02/fig/3.png")#koukaton_image
     kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
     clock = pg.time.Clock()
     tmr = 0
