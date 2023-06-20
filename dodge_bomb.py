@@ -60,10 +60,12 @@ def main():
     kk_rct.center=900,400
     bomb_imgs= []
     for r in range(1, 11):
-        bomb_img = pg.Surface((20 * r, 20 * r))
+        bomb_img = pg.Surface((20 * r, 20 * r)) #爆弾サーフェスの作成
+        #関数を用いて、円と色の変更
         pg.draw.circle(bomb_img, (255, 0, 0), (10 * r, 10 * r), 10 * r)
         bomb_img.set_colorkey((0,0,0))
-        bomb_imgs.append(bomb_img)
+
+        bomb_imgs.append(bomb_img)#異なるサイズの爆弾画像を格納するために使用
     x = random.randint(0,WIDTH)
     y = random.randint(0,HEIGHT)
     #爆弾Surface(bomb_img)
@@ -82,7 +84,7 @@ def main():
                 return
         if kk_rct.colliderect(bomb_rect):
             print("game over")
-            return  #ガメオベラ
+            return  #gameover
         
         key_lst = pg.key.get_pressed()
         sum_mv = [0,0] #合計移動量
@@ -100,7 +102,7 @@ def main():
 
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_imgs[tuple(sum_mv)], kk_rct)
-
+        #爆弾の移動時間ごとに大きさを変化させる変数の追加
         avx, avy = vx*accs[min(tmr//500, 9)], vy*accs[min(tmr//500, 9)]
 
         bomb_img = bomb_imgs[min(tmr//500,9)]
