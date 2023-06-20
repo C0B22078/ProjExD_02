@@ -12,6 +12,7 @@ pg.K_LEFT: (-5,0),
 pg.K_RIGHT: (+5,0),
 }
 
+
 def window_judge(rct:pg.rect) -> tuple[bool,bool]:
     """
     こうかとんRect,爆弾Rectが画面外or 画面内かを判定する関数
@@ -27,14 +28,35 @@ def window_judge(rct:pg.rect) -> tuple[bool,bool]:
         tate = False
     return yoko,tate
 
+def img_ch():
+        kk_img = pg.image.load("ex02/fig/3.png")#koukaton_image
+        kk_img = pg.transform.rotozoom(kk_img, 0, 1.0)
+        kk_img_rv = pg.transform.flip(kk_img, True, False)
+        img_change =  {
+            (-5,-5):pg.transform.rotozoom(kk_img,-45,2.0),
+            (-5,0):pg.transform.rotozoom(kk_img,0,2.0),
+            (-5,+5):pg.transform.rotozoom(kk_img, 45, 2.0),
+            (+5,-5):pg.transform.rotozoom(kk_img_rv,45,2.0),
+            (+5,0):pg.transform.rotozoom(kk_img_rv,0,2.0),
+            (+5,+5):pg.transform.rotozoom(kk_img_rv,-45,2.0),
+            (0,-5):pg.transform.rotozoom(kk_img_rv,90,2.0),
+            (0,+5):pg.transform.rotozoom(kk_img_rv,-90,2.0),
+            (0,0):pg.transform.rotozoom(kk_img_rv,0,2.0),
+        }
+        
+        return img_change
+
 def main():
     pg.display.set_caption("逃げろ！こうかとん")
     screen = pg.display.set_mode((WIDTH, HEIGHT))
     bg_img = pg.image.load("ex02/fig/pg_bg.jpg")#backgroundimage
-    kk_img = pg.image.load("ex02/fig/3.png")#koukaton_image
-    kk_img = pg.transform.rotozoom(kk_img, 0, 2.0)
+    kk_imgs = img_ch() #画像の挿入
+    
+    
+
+    
     #こうかとんSurface (kk_img)からこうかとんRect(kk_rct)を抽出する　
-    kk_rct =kk_img.get_rect()
+    kk_rct =kk_imgs[(0,0)].get_rect()
     kk_rct.center=900,400
     bomb_img = pg.Surface((20,20))
     bomb_img.set_colorkey((0,0,0)) #黒い部分を透明に
@@ -48,8 +70,7 @@ def main():
     clock = pg.time.Clock()
     tmr = 0
     vx,vy = +5,+5
-    
-    
+
     
     while True:
         for event in pg.event.get():
@@ -58,20 +79,24 @@ def main():
         if kk_rct.colliderect(bomb_rect):
             print("game over")
             return  #ガメオベラ
+        
         key_lst = pg.key.get_pressed()
         sum_mv = [0,0] #合計移動量
 
         for k,mv in delta.items():
             if key_lst[k] :
+                kk_rct.move_ip(mv)
                 sum_mv[0]+= mv[0]
                 sum_mv[1]+= mv[1]
                 
-        kk_rct.move_ip(sum_mv[0],sum_mv[1])
+        
+
         if window_judge(kk_rct) != (True,True):
             kk_rct.move_ip(-sum_mv[0],-sum_mv[1])
 
         screen.blit(bg_img, [0, 0])
-        screen.blit(kk_img, kk_rct)
+        screen.blit(kk_imgs[tuple(sum_mv)], kk_rct)
+
         bomb_rect.move_ip(vx,vy) #練習2
         yoko,tate = window_judge(bomb_rect)
         if not yoko: #横方向に画面外だったら
