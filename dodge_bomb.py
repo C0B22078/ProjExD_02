@@ -25,6 +25,7 @@ def main():
 
     clock = pg.time.Clock()
     tmr = 0
+    vx,vy = +5,+5
     while True:
         for event in pg.event.get():
             if event.type == pg.QUIT: 
@@ -32,10 +33,12 @@ def main():
 
         screen.blit(bg_img, [0, 0])
         screen.blit(kk_img, [900, 400])
+        bomb_rect.move_ip(vx,vy) #練習2
         screen.blit(bomb_img,bomb_rect)
         pg.display.update()
+        
         tmr += 1
-        clock.tick(10)
+        clock.tick(50)
 
 
 if __name__ == "__main__":
