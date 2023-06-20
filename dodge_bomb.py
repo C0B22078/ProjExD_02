@@ -84,7 +84,7 @@ def main():
                 return
         if kk_rct.colliderect(bomb_rect):
             print("game over")
-            return  #gameover
+            return  #ゲームオーバー
         
         key_lst = pg.key.get_pressed()
         sum_mv = [0,0] #合計移動量
