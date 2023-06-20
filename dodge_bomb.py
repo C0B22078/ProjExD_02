@@ -55,7 +55,9 @@ def main():
         for event in pg.event.get():
             if event.type == pg.QUIT: 
                 return
-        
+        if kk_rct.colliderect(bomb_rect):
+            print("game over")
+            return  #ガメオベラ
         key_lst = pg.key.get_pressed()
         sum_mv = [0,0] #合計移動量
 
