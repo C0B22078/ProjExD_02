@@ -1,3 +1,9 @@
+"""
+こうかとんの
+直し方は
+わかりません
+"""
+
 import sys
 import random
 import pygame as pg
